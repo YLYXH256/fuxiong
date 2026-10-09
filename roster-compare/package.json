@@ -1,0 +1,21 @@
+{
+  "name": "roster-compare-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "test": "node --test src/compare.test.js",
+    "test:browser": "node tests/browser-smoke.mjs && node tests/browser-regressions.mjs"
+  },
+  "dependencies": {
+    "lucide": "^0.468.0",
+    "papaparse": "^5.5.3",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "vite": "^6.1.0"
+  }
+}

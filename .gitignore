@@ -1,0 +1,4 @@
+roster-compare/node_modules/
+roster-compare/dist/
+roster-compare/artifacts/
+roster-compare/server*.log

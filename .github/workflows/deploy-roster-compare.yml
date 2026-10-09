@@ -1,0 +1,50 @@
+name: Deploy roster compare
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'roster-compare/**'
+      - '.github/workflows/deploy-roster-compare.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: roster-compare/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: roster-compare
+        run: pnpm install --frozen-lockfile
+      - name: Build static site
+        working-directory: roster-compare
+        run: pnpm build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: roster-compare/dist
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
