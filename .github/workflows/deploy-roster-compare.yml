@@ -22,23 +22,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: roster-compare/pnpm-lock.yaml
       - name: Install dependencies
         working-directory: roster-compare
-        run: pnpm install --no-frozen-lockfile
+        run: npm install --no-audit --no-fund
       - name: Build static site
         working-directory: roster-compare
-        run: pnpm build
+        run: npm run build
+      - name: Assemble existing site and app
+        run: |
+          mkdir -p public/roster-compare
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'roster-compare' --exclude 'public' ./ public/
+          rsync -a roster-compare/dist/ public/roster-compare/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: roster-compare/dist
+          path: public
   deploy:
     environment:
       name: github-pages
