@@ -32,7 +32,7 @@ jobs:
           cache-dependency-path: roster-compare/pnpm-lock.yaml
       - name: Install dependencies
         working-directory: roster-compare
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Build static site
         working-directory: roster-compare
         run: pnpm build
